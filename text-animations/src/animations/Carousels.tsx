@@ -235,18 +235,29 @@ export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: num
 /**
  * A big wheel of words rotating around an off-screen center. The word at the
  * 3 o'clock position is highlighted and a label with an arrow points at it.
- * One word per line. Use durationInFrames (e.g. 180) to set speed.
+ * One word per line. The wheel steps one word at a time: it pauses on a word, then
+ * eases to the next. `holdRatio` (0..1) is the share of each step spent paused.
+ * Total loop = words x frames-per-word, so set durationInFrames accordingly
+ * (default: 12 words x 40 frames = 480 frames, ~1.3s per word at 30fps).
  */
-export const LoopWheel: React.FC<TextProps & {label: string; accent: string; radius: number}> = (p) => {
+export const LoopWheel: React.FC<
+  TextProps & {label: string; accent: string; radius: number; holdRatio: number}
+> = (p) => {
   const t = useLoopP();
   const words = p.text.split('\n').filter(Boolean);
   const n = words.length;
   const cx = 380;
+  // Stepped, eased position measured in words (0..n).
+  const x = t * n;
+  const k = Math.floor(x);
+  const f = Math.max(0, (x - k - p.holdRatio) / (1 - p.holdRatio)); // 0 while holding, then 0..1 while moving
+  const eased = f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2;
+  const pos = (k + eased) / n; // 0..1 around the wheel
   return (
     <Stage background={p.background}>
       <div style={{position: 'absolute', inset: 0}}>
         {words.map((w, i) => {
-          const a = ((i / n - t) % 1 + 1) % 1; // 0..1 around the wheel
+          const a = ((i / n - pos) % 1 + 1) % 1; // 0..1 around the wheel
           const deg = a > 0.5 ? (a - 1) * 360 : a * 360; // -180..180, 0 = selected (3 o'clock)
           const d = Math.abs(deg);
           const sel = d < 360 / n / 2;
