@@ -37,6 +37,15 @@ npm run studio        # live preview + edit props in the sidebar
 | `LoopHighlightBar` | Seamless loop: words pass through a white highlight bar with an arrow |
 | `LoopMirror` | Seamless loop: words scroll outward from a center axis, mirrored |
 | `LoopSlice` | Seamless loop: word cut into strips that shift and snap back |
+| `ScrambleDecode` | Random characters resolve into the text |
+| `NeonFlicker` | Neon sign flickers on |
+| `WipeReveal` | Bar wipes across to reveal the text |
+| `ElasticStretch` | Rubber-band stretch with overshoot |
+| `TrackingIn` | Cinematic letter-spacing tightens as it fades in |
+| `SplitFlip` | Letters flip in like a split-flap board |
+| `Counter` | Number counts up (`from`, `to`, `prefix`, `suffix`) |
+| `Karaoke` | Caption words light up one at a time |
+| `Extrude3D` | Chunky 3D extruded title pops in |
 
 The `Loop*` clips are 90 frames and repeat with no visible jump, so you can stretch or repeat them on your timeline.
 

@@ -29,6 +29,18 @@ import {
   LoopMirror,
 } from './animations/Loops';
 
+import {
+  Counter,
+  ElasticStretch,
+  Extrude3D,
+  Karaoke,
+  NeonFlicker,
+  ScrambleDecode,
+  SplitFlip,
+  TrackingIn,
+  WipeReveal,
+} from './animations/More';
+
 const common = {width: 1920, height: 1080, fps: 30};
 
 const loops = [
@@ -79,6 +91,15 @@ export const RemotionRoot: React.FC = () => (
       {...common}
       defaultProps={{...defaultTextProps, text: 'ENERGY\nTREND\nBRIGHT\nACTIVE', fontSize: 380, slices: 6}}
     />
+    <Composition id="ScrambleDecode" component={ScrambleDecode} durationInFrames={90} {...common} defaultProps={{...defaultTextProps, text: 'DECODING', framesPerChar: 5}} />
+    <Composition id="NeonFlicker" component={NeonFlicker} durationInFrames={90} {...common} defaultProps={{...defaultTextProps, text: 'OPEN 24/7', glowColor: '#ff2bd6'}} />
+    <Composition id="WipeReveal" component={WipeReveal} durationInFrames={75} {...common} defaultProps={{...defaultTextProps, barColor: '#ff3d71'}} />
+    <Composition id="ElasticStretch" component={ElasticStretch} durationInFrames={75} {...common} defaultProps={{...defaultTextProps, text: 'BOING'}} />
+    <Composition id="TrackingIn" component={TrackingIn} durationInFrames={90} {...common} defaultProps={{...defaultTextProps, text: 'THE FILM TITLE', fontWeight: 300, fontSize: 120}} />
+    <Composition id="SplitFlip" component={SplitFlip} durationInFrames={90} {...common} defaultProps={{...defaultTextProps, text: 'FLIP BOARD', delayPerLetter: 3}} />
+    <Composition id="Counter" component={Counter} durationInFrames={90} {...common} defaultProps={{...defaultTextProps, fontSize: 260, from: 0, to: 1250000, prefix: '', suffix: '+', countFrames: 60}} />
+    <Composition id="Karaoke" component={Karaoke} durationInFrames={110} {...common} defaultProps={{...defaultTextProps, fontSize: 120, text: 'Highlight every word as it is spoken', highlightColor: '#ff3d71', dimColor: '#6b6b6b', wordFrames: 12}} />
+    <Composition id="Extrude3D" component={Extrude3D} durationInFrames={75} {...common} defaultProps={{...defaultTextProps, text: 'BIG 3D', fontSize: 240, color: '#ffd23f', extrudeColor: '#b8641a'}} />
     {lists.map((l) => (
       <Composition
         key={l.id}

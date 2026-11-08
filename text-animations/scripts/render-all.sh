@@ -3,7 +3,7 @@
 # Default: WebM (VP8 + alpha). FORMAT=prores -> MOV ProRes 4444 (best for Premiere/DaVinci/FCP).
 set -euo pipefail
 
-IDS=(FadeUp Typewriter WordPop LetterBounce SlideReveal Glitch HighlightSweep BlurIn LowerThird LoopWave LoopMarquee LoopPulse LoopFloat LoopRainbow LoopShine LoopSpin3D LoopStagger LoopWordStack LoopNameFade LoopSlot LoopBlockStack LoopHighlightBar LoopMirror LoopSlice)
+IDS=(FadeUp Typewriter WordPop LetterBounce SlideReveal Glitch HighlightSweep BlurIn LowerThird LoopWave LoopMarquee LoopPulse LoopFloat LoopRainbow LoopShine LoopSpin3D LoopStagger LoopWordStack LoopNameFade LoopSlot LoopBlockStack LoopHighlightBar LoopMirror LoopSlice ScrambleDecode NeonFlicker WipeReveal ElasticStretch TrackingIn SplitFlip Counter Karaoke Extrude3D)
 FORMAT="${FORMAT:-webm}"
 mkdir -p out
 
