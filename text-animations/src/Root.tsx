@@ -166,11 +166,13 @@ export const RemotionRoot: React.FC = () => (
       {...common}
       defaultProps={{
         ...defaultTextProps,
-        fontSize: 64,
-        fontWeight: 700,
+        fontSize: 58,
+        fontWeight: 800,
         label: 'Date',
-        accent: '#4da3ff',
-        radius: 760,
+        accent: '#2f6bff',
+        radius: 940,
+        centerX: 120,
+        stepDeg: 12,
         holdRatio: 0.45,
         text: 'January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember',
       }}

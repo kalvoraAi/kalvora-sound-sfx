@@ -233,48 +233,49 @@ export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: num
 };
 
 /**
- * A big wheel of words rotating around an off-screen center. The word at the
- * 3 o'clock position is highlighted and a label with an arrow points at it.
- * One word per line. The wheel steps one word at a time: it pauses on a word, then
- * eases to the next. `holdRatio` (0..1) is the share of each step spent paused.
- * Total loop = words x frames-per-word, so set durationInFrames accordingly
- * (default: 12 words x 40 frames = 480 frames, ~1.3s per word at 30fps).
+ * A big wheel of words (like month names) turning around an off-screen-left center.
+ * Words are ~12 degrees apart, so only a handful are visible: the selected word sits at
+ * 3 o'clock, a thin accent arrow points from a label ("DATE") to it, words above are bright
+ * white and words below are dim gray. The wheel steps one word at a time: it pauses, then
+ * eases to the next (months advance as the list moves down).
+ * One word per line. Loop length = words x frames-per-word (default 12 x 40 = 480 frames).
+ * `holdRatio` (0..1) is the share of each step spent paused.
  */
 export const LoopWheel: React.FC<
-  TextProps & {label: string; accent: string; radius: number; holdRatio: number}
+  TextProps & {label: string; accent: string; radius: number; holdRatio: number; stepDeg: number; centerX: number}
 > = (p) => {
   const t = useLoopP();
   const words = p.text.split('\n').filter(Boolean);
   const n = words.length;
-  const cx = 380;
-  // Stepped, eased position measured in words (0..n).
   const x = t * n;
   const k = Math.floor(x);
-  const f = Math.max(0, (x - k - p.holdRatio) / (1 - p.holdRatio)); // 0 while holding, then 0..1 while moving
-  const eased = f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2;
-  const pos = (k + eased) / n; // 0..1 around the wheel
+  const f = Math.max(0, (x - k - p.holdRatio) / (1 - p.holdRatio));
+  const frac = f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2; // 0 while holding, then eases 0..1
+  const startX = p.centerX + p.radius;
+  const slots = Array.from({length: 13}, (_, i) => i - 7); // -7 (high above) .. +5 (below)
   return (
     <Stage background={p.background}>
       <div style={{position: 'absolute', inset: 0}}>
-        {words.map((w, i) => {
-          const a = ((i / n - pos) % 1 + 1) % 1; // 0..1 around the wheel
-          const deg = a > 0.5 ? (a - 1) * 360 : a * 360; // -180..180, 0 = selected (3 o'clock)
-          const d = Math.abs(deg);
-          const sel = d < 360 / n / 2;
+        {slots.map((slot) => {
+          const w = words[(((k - slot) % n) + n) % n];
+          const deg = (slot + frac) * p.stepDeg; // negative = above the selector
+          const d = Math.abs(deg) / p.stepDeg;
+          const above = deg <= p.stepDeg * 0.5;
           return (
             <div
-              key={i}
+              key={slot}
               style={{
                 position: 'absolute',
-                left: cx,
+                left: p.centerX,
                 top: 540,
                 transformOrigin: '0 50%',
                 transform: `rotate(${deg}deg) translateX(${p.radius}px) translateY(-50%)`,
                 fontSize: p.fontSize,
                 fontFamily: p.fontFamily,
                 fontWeight: p.fontWeight,
-                color: sel ? p.color : '#8a8a8a',
-                opacity: Math.max(0, 1 - d / 75),
+                letterSpacing: 1,
+                color: above ? p.color : '#6f6f6f',
+                opacity: Math.max(0, 1 - Math.max(0, d - 1.5) * 0.25) * (above ? 1 : Math.max(0, 1 - d * 0.28)),
                 whiteSpace: 'pre',
               }}
             >
@@ -285,21 +286,28 @@ export const LoopWheel: React.FC<
         <div
           style={{
             position: 'absolute',
-            left: cx - 220,
+            left: startX - 215 - 40,
             top: 540,
-            transform: 'translateY(-50%)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 16,
-            fontSize: p.fontSize * 0.6,
+            transform: 'translate(-100%, -50%)',
+            fontSize: p.fontSize * 0.7,
             fontFamily: p.fontFamily,
             fontWeight: p.fontWeight,
             color: p.color,
           }}
         >
           {p.label.toUpperCase()}
-          <div style={{width: p.radius - 120, height: 3, background: p.accent}} />
         </div>
+        <div
+          style={{
+            position: 'absolute',
+            left: startX - 215,
+            top: 540,
+            width: 165,
+            height: 3,
+            transform: 'translateY(-50%)',
+            background: p.accent,
+          }}
+        />
       </div>
     </Stage>
   );
