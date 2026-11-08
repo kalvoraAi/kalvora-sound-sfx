@@ -129,7 +129,7 @@ export const RemotionRoot: React.FC = () => (
       component={LoopTiltedStrips}
       durationInFrames={LOOP_FRAMES}
       {...common}
-      defaultProps={{...defaultTextProps, fontSize: 130, accent: '#ff3b14', rowHeight: 190, text: 'Text carousel\nAnimated text\nText list'}}
+      defaultProps={{...defaultTextProps, fontSize: 96, accent: '#ff3b14', spacing: 190, text: 'Text carousel\nAnimated text\nText list\nLooped text\nKinetic type\nMarquee'}}
     />
     <Composition
       id="LoopPillMarquee"

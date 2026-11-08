@@ -20,10 +20,11 @@ export const LoopPillCarousel: React.FC<TextProps & {accent: string; spacing: nu
     <Stage background={p.background}>
       <div style={{position: 'absolute', inset: 0}}>
         {items.map((label, i) => {
-          const y = ((((i * p.spacing - t * total) % total) + total) % total) - total / 2;
+          // Pills travel downward: outlined above the center line, filled (glowing) below it.
+          const y = ((((i * p.spacing + t * total) % total) + total) % total) - total / 2;
           const d = Math.abs(y) / p.spacing;
-          const filled = d <= p.filledRows / 2 + 0.2;
-          const edge = Math.max(0, Math.min(1, (items.length / 2 - d) * 0.9));
+          const filled = y > -p.spacing * 0.35 && y < p.spacing * (p.filledRows + 0.2);
+          const edge = Math.max(0, Math.min(1, (items.length / 2 - d) * 0.9)) * (y > 0 ? Math.max(0, 1 - Math.max(0, y / p.spacing - p.filledRows + 1) * 0.9) : 1);
           return (
             <div
               key={i}
@@ -45,9 +46,10 @@ export const LoopPillCarousel: React.FC<TextProps & {accent: string; spacing: nu
                   color: p.color,
                   padding: `${p.fontSize * 0.22}px ${p.fontSize * 0.8}px`,
                   borderRadius: 999,
-                  border: `3px solid ${filled ? p.accent : p.color}`,
-                  background: filled ? p.accent : 'rgba(0,0,0,0.35)',
-                  boxShadow: filled ? `0 0 ${p.fontSize}px ${p.accent}` : 'none',
+                  border: filled ? `3px solid ${p.accent}` : `2px solid ${p.color}`,
+                  background: filled ? `linear-gradient(180deg, ${p.accent}, #b81d00)` : 'transparent',
+                  boxShadow: filled ? `0 0 ${p.fontSize * 0.6}px ${p.accent}` : 'none',
+                  transform: `scale(${Math.max(0.7, 1 - d * 0.05)})`,
                   whiteSpace: 'pre',
                 }}
               >
@@ -61,64 +63,52 @@ export const LoopPillCarousel: React.FC<TextProps & {accent: string; spacing: nu
   );
 };
 
-type RowStyle = {bg: string; color: string; border: string; rotate: number; dir: 1 | -1};
-
 /**
- * Horizontal marquee rows inside boxes. Each line of `text` is one row; rows
- * cycle through three box styles (solid accent, dark with accent outline,
- * outlined + tilted) and alternate scroll direction.
+ * Vertical carousel of label boxes. The box in the top slot is solid accent with
+ * white text; the others are black boxes with an accent outline and a small random-looking
+ * tilt. Labels scroll upward and overlap slightly as they pass. One label per line.
  */
-export const LoopTiltedStrips: React.FC<TextProps & {accent: string; rowHeight: number}> = (p) => {
+export const LoopTiltedStrips: React.FC<TextProps & {accent: string; spacing: number}> = (p) => {
   const t = useLoopP();
-  const rows = p.text.split('\n').filter(Boolean);
-  const copies = 6;
-  const styles: RowStyle[] = [
-    {bg: p.accent, color: '#fff', border: p.accent, rotate: 0, dir: 1},
-    {bg: '#000', color: '#fff', border: p.accent, rotate: -2, dir: -1},
-    {bg: '#000', color: '#fff', border: p.accent, rotate: -6, dir: 1},
-  ];
-  const gap = p.rowHeight * 1.25;
+  const labels = p.text.split('\n').filter(Boolean);
+  const total = labels.length * p.spacing;
   return (
     <Stage background={p.background}>
       <div style={{position: 'absolute', inset: 0, overflow: 'hidden'}}>
-        {rows.map((row, r) => {
-          const st = styles[r % styles.length];
-          const shift = st.dir === 1 ? -(t * 100) / copies : -100 / copies + (t * 100) / copies;
+        {labels.map((label, i) => {
+          const y = ((((i * p.spacing - t * total) % total) + total) % total) - total / 2;
+          const top = y < -p.spacing * 0.6; // top slot = filled style
+          const tilt = top ? 0 : Math.sin(i * 2.1) * 3.5 - 1;
+          const edge = Math.max(0, Math.min(1, (labels.length / 2 - Math.abs(y) / p.spacing) * 1.2));
           return (
             <div
-              key={r}
+              key={i}
               style={{
                 position: 'absolute',
-                left: -200,
-                right: -200,
-                top: 540 + (r - (rows.length - 1) / 2) * gap - p.rowHeight / 2,
-                height: p.rowHeight,
-                transform: `rotate(${st.rotate}deg)`,
+                left: 0,
+                right: 0,
+                top: 540 + y - p.fontSize,
+                height: p.fontSize * 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: edge,
+                transform: `rotate(${tilt}deg)`,
               }}
             >
-              <div style={{display: 'flex', width: 'max-content', height: '100%', transform: `translateX(${shift}%)`}}>
-                {Array.from({length: copies}).map((_, k) => (
-                  <div
-                    key={k}
-                    style={{
-                      flexShrink: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: `0 ${p.rowHeight * 0.4}px`,
-                      marginRight: p.rowHeight * 0.4,
-                      height: '100%',
-                      background: st.bg,
-                      color: st.color,
-                      border: `4px solid ${st.border}`,
-                      fontSize: p.fontSize,
-                      fontFamily: p.fontFamily,
-                      fontWeight: p.fontWeight,
-                      whiteSpace: 'pre',
-                    }}
-                  >
-                    {row.toUpperCase()}
-                  </div>
-                ))}
+              <div
+                style={{
+                  padding: `${p.fontSize * 0.12}px ${p.fontSize * 0.3}px`,
+                  background: top ? p.accent : '#000',
+                  color: p.color,
+                  border: top ? 'none' : `4px solid ${p.accent}`,
+                  fontSize: top ? p.fontSize * 1.1 : p.fontSize,
+                  fontFamily: p.fontFamily,
+                  fontWeight: p.fontWeight,
+                  whiteSpace: 'pre',
+                }}
+              >
+                {label.toUpperCase()}
               </div>
             </div>
           );
