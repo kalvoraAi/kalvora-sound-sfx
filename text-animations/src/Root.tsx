@@ -162,7 +162,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="LoopWheel"
       component={LoopWheel}
-      durationInFrames={720}
+      durationInFrames={480}
       {...common}
       defaultProps={{
         ...defaultTextProps,
@@ -174,7 +174,7 @@ export const RemotionRoot: React.FC = () => (
         radius: 940,
         centerX: 120,
         stepDeg: 12,
-        holdRatio: 0.75,
+        holdRatio: 0.7,
         text: 'January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember',
       }}
     />
