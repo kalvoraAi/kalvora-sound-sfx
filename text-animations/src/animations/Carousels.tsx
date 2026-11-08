@@ -239,8 +239,9 @@ export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: num
  * A big wheel of words (like month names) turning around an off-screen-left center.
  * Words are ~12 degrees apart, so only a handful are visible: the selected word sits at
  * 3 o'clock, a thin accent arrow points from a label ("DATE") to it, words above are bright
- * white and words below are dim gray. The wheel steps one word at a time: it holds, then
- * snaps to the next with a quick ease (months advance as the list moves down).
+ * white and words below are dim gray. By default (`holdRatio` 0) the wheel turns smoothly at a
+ * constant speed. Set `holdRatio` above 0 (e.g. 0.7) for a stepped look that pauses on each word.
+ * Months advance as the list moves down.
  * Default: ~30 frames (1s) per word at 30fps. (The reference clip measured ~20 frames per word.)
  * One word per line. Loop length = words x frames-per-word (default 12 words x 30 = 360 frames).
  * To change speed, change durationInFrames in Root.tsx (= words x frames-per-word).
@@ -255,7 +256,7 @@ export const LoopWheel: React.FC<
   const x = t * n;
   const k = Math.floor(x);
   const f = Math.max(0, (x - k - p.holdRatio) / (1 - p.holdRatio));
-  const frac = f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2; // 0 while holding, then smooth ease-in-out 0..1
+  const frac = p.holdRatio > 0 ? (f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2) : f; // holdRatio 0 = perfectly smooth constant-speed motion
   const startX = p.centerX + p.radius;
   const slots = Array.from({length: 13}, (_, i) => i - 7); // -7 (high above) .. +5 (below)
   return (

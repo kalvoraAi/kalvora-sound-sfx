@@ -174,7 +174,7 @@ export const RemotionRoot: React.FC = () => (
         radius: 940,
         centerX: 120,
         stepDeg: 12,
-        holdRatio: 0.7,
+        holdRatio: 0,
         text: 'January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember',
       }}
     />
