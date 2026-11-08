@@ -241,3 +241,104 @@ export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: num
     </Stage>
   );
 };
+
+/**
+ * A big wheel of words rotating around an off-screen center. The word at the
+ * 3 o'clock position is highlighted and a label with an arrow points at it.
+ * One word per line. Use durationInFrames (e.g. 180) to set speed.
+ */
+export const LoopWheel: React.FC<TextProps & {label: string; accent: string; radius: number}> = (p) => {
+  const t = useLoopP();
+  const words = p.text.split('\n').filter(Boolean);
+  const n = words.length;
+  const cx = 380;
+  return (
+    <Stage background={p.background}>
+      <div style={{position: 'absolute', inset: 0}}>
+        {words.map((w, i) => {
+          const a = ((i / n - t) % 1 + 1) % 1; // 0..1 around the wheel
+          const deg = a > 0.5 ? (a - 1) * 360 : a * 360; // -180..180, 0 = selected (3 o'clock)
+          const d = Math.abs(deg);
+          const sel = d < 360 / n / 2;
+          return (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: cx,
+                top: 540,
+                transformOrigin: '0 50%',
+                transform: `rotate(${deg}deg) translateX(${p.radius}px) translateY(-50%)`,
+                fontSize: p.fontSize,
+                fontFamily: p.fontFamily,
+                fontWeight: p.fontWeight,
+                color: sel ? p.color : '#8a8a8a',
+                opacity: Math.max(0, 1 - d / 75),
+                whiteSpace: 'pre',
+              }}
+            >
+              {w.toUpperCase()}
+            </div>
+          );
+        })}
+        <div
+          style={{
+            position: 'absolute',
+            left: cx - 220,
+            top: 540,
+            transform: 'translateY(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            fontSize: p.fontSize * 0.6,
+            fontFamily: p.fontFamily,
+            fontWeight: p.fontWeight,
+            color: p.color,
+          }}
+        >
+          {p.label.toUpperCase()}
+          <div style={{width: p.radius - 120, height: 3, background: p.accent}} />
+        </div>
+      </div>
+    </Stage>
+  );
+};
+
+/** Tight vertical stack of bold words in a rotating palette, scrolling upward. One word per line. */
+export const LoopColorStack: React.FC<TextProps & {palette: string[]; lineHeight: number}> = (p) => {
+  const t = useLoopP();
+  const words = p.text.split('\n').filter(Boolean);
+  const total = words.length * p.lineHeight;
+  return (
+    <Stage background={p.background}>
+      <div style={{position: 'absolute', inset: 0}}>
+        {words.map((w, i) => {
+          const y = ((((i * p.lineHeight - t * total) % total) + total) % total) - total / 2;
+          const d = Math.abs(y) / p.lineHeight;
+          return (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 540 + y - p.lineHeight / 2,
+                height: p.lineHeight,
+                lineHeight: `${p.lineHeight}px`,
+                textAlign: 'center',
+                fontSize: p.fontSize,
+                fontFamily: p.fontFamily,
+                fontWeight: p.fontWeight,
+                color: p.palette[i % p.palette.length],
+                opacity: Math.max(0, Math.min(1, (words.length / 2 - d) * 0.8)),
+                whiteSpace: 'pre',
+              }}
+            >
+              {w.toUpperCase()}
+            </div>
+          );
+        })}
+      </div>
+    </Stage>
+  );
+};

@@ -50,6 +50,8 @@ npm run studio        # live preview + edit props in the sidebar
 | `LoopTiltedStrips` | Seamless loop: tilted marquee rows in boxes, alternating direction (one row per line) |
 | `LoopPillMarquee` | Seamless loop: rows of outlined pill chips scrolling sideways (chips split by `\|`, start with `*` to fill) |
 | `LoopSpiralText` | Seamless loop: words ride a scrolling S-shaped ribbon |
+| `LoopWheel` | Seamless loop: words on a rotating wheel with a highlighted selector and label |
+| `LoopColorStack` | Seamless loop: tight stack of bold multicolor words scrolling up |
 
 The `Loop*` clips are 90 frames and repeat with no visible jump, so you can stretch or repeat them on your timeline.
 

@@ -41,7 +41,14 @@ import {
   WipeReveal,
 } from './animations/More';
 
-import {LoopPillCarousel, LoopPillMarquee, LoopSpiralText, LoopTiltedStrips} from './animations/Carousels';
+import {
+  LoopColorStack,
+  LoopPillCarousel,
+  LoopPillMarquee,
+  LoopSpiralText,
+  LoopTiltedStrips,
+  LoopWheel,
+} from './animations/Carousels';
 
 const common = {width: 1920, height: 1080, fps: 30};
 
@@ -150,6 +157,35 @@ export const RemotionRoot: React.FC = () => (
         count: 14,
         amplitude: 320,
         text: 'Parallax effect\nFinal render\nScene transition\nText carousel\nAlpha matte\nKeyframe animation',
+      }}
+    />
+    <Composition
+      id="LoopWheel"
+      component={LoopWheel}
+      durationInFrames={180}
+      {...common}
+      defaultProps={{
+        ...defaultTextProps,
+        fontSize: 64,
+        fontWeight: 700,
+        label: 'Date',
+        accent: '#4da3ff',
+        radius: 760,
+        text: 'January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember',
+      }}
+    />
+    <Composition
+      id="LoopColorStack"
+      component={LoopColorStack}
+      durationInFrames={LOOP_FRAMES}
+      {...common}
+      defaultProps={{
+        ...defaultTextProps,
+        fontSize: 120,
+        fontWeight: 800,
+        lineHeight: 120,
+        palette: ['#ffd23f', '#ff8a1f', '#ff3b14', '#9be15d', '#ffffff'],
+        text: 'Animated text\nLooped text\nText list\nKinetic type\nMarquee\nText carousel\nSmooth motion\nClean style',
       }}
     />
     {lists.map((l) => (
