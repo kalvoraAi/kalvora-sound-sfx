@@ -127,3 +127,117 @@ export const LoopTiltedStrips: React.FC<TextProps & {accent: string; rowHeight: 
     </Stage>
   );
 };
+
+/**
+ * Rows of outlined pill chips scrolling sideways, alternating direction.
+ * One row per line; chips separated by "|". Start a chip with "*" to fill it with the accent color.
+ */
+export const LoopPillMarquee: React.FC<TextProps & {accent: string; rowGap: number}> = (p) => {
+  const t = useLoopP();
+  const rows = p.text.split('\n').filter(Boolean);
+  const copies = 4;
+  return (
+    <Stage background={p.background}>
+      <div style={{position: 'absolute', inset: 0, overflow: 'hidden'}}>
+        {rows.map((row, r) => {
+          const chips = row.split('|').map((c) => c.trim()).filter(Boolean);
+          const dir = r % 2 === 0 ? 1 : -1;
+          const shift = dir === 1 ? -(t * 100) / copies : -100 / copies + (t * 100) / copies;
+          // Offset each row so rows don't line up.
+          const nudge = (r % 3) * 6;
+          return (
+            <div
+              key={r}
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 540 + (r - (rows.length - 1) / 2) * p.rowGap - p.fontSize,
+                height: p.fontSize * 2,
+                display: 'flex',
+                alignItems: 'center',
+                transform: `translateX(${nudge}px)`,
+              }}
+            >
+              <div style={{display: 'flex', width: 'max-content', transform: `translateX(${shift}%)`}}>
+                {Array.from({length: copies}).flatMap((_, k) =>
+                  chips.map((chip, i) => {
+                    const filled = chip.startsWith('*');
+                    const label = filled ? chip.slice(1).trim() : chip;
+                    return (
+                      <div
+                        key={`${k}-${i}`}
+                        style={{
+                          flexShrink: 0,
+                          marginRight: p.fontSize * 0.5,
+                          padding: `${p.fontSize * 0.25}px ${p.fontSize * 0.8}px`,
+                          borderRadius: 999,
+                          border: `3px solid ${filled ? p.accent : p.color}`,
+                          background: filled ? p.accent : 'transparent',
+                          color: p.color,
+                          fontSize: p.fontSize,
+                          fontFamily: p.fontFamily,
+                          fontWeight: p.fontWeight,
+                          whiteSpace: 'pre',
+                        }}
+                      >
+                        {label}
+                      </div>
+                    );
+                  }),
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Stage>
+  );
+};
+
+/**
+ * Words ride an S-shaped ribbon that scrolls forever; they shrink and fade toward both ends
+ * for a sense of depth. One word or phrase per line.
+ */
+export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: number}> = (p) => {
+  const t = useLoopP();
+  const words = p.text.split('\n').filter(Boolean);
+  const n = p.count;
+  const H = 1000;
+  const pos = (s: number) => ({
+    x: Math.sin(s * Math.PI * 2 * 1.1) * p.amplitude,
+    y: (s - 0.5) * H,
+  });
+  return (
+    <Stage background={p.background}>
+      <div style={{position: 'absolute', inset: 0}}>
+        {Array.from({length: n}).map((_, k) => {
+          const s = (((k / n - t) % 1) + 1) % 1;
+          const a = pos(s);
+          const b = pos(Math.min(1, s + 0.01));
+          const angle = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI - 90 + 90;
+          const depth = Math.cos((s - 0.5) * Math.PI); // 1 center, 0 ends
+          return (
+            <div
+              key={k}
+              style={{
+                position: 'absolute',
+                left: 960 + a.x,
+                top: 540 + a.y,
+                transform: `translate(-50%, -50%) rotate(${angle * 0.35}deg) scale(${0.35 + depth * 0.75})`,
+                opacity: Math.max(0, depth * 1.2 - 0.1),
+                color: p.color,
+                fontSize: p.fontSize,
+                fontFamily: p.fontFamily,
+                fontWeight: p.fontWeight,
+                whiteSpace: 'pre',
+              }}
+            >
+              {words[k % words.length]}
+            </div>
+          );
+        })}
+      </div>
+    </Stage>
+  );
+};

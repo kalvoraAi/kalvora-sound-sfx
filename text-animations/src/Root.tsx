@@ -41,7 +41,7 @@ import {
   WipeReveal,
 } from './animations/More';
 
-import {LoopPillCarousel, LoopTiltedStrips} from './animations/Carousels';
+import {LoopPillCarousel, LoopPillMarquee, LoopSpiralText, LoopTiltedStrips} from './animations/Carousels';
 
 const common = {width: 1920, height: 1080, fps: 30};
 
@@ -123,6 +123,34 @@ export const RemotionRoot: React.FC = () => (
       durationInFrames={LOOP_FRAMES}
       {...common}
       defaultProps={{...defaultTextProps, fontSize: 130, accent: '#ff3b14', rowHeight: 190, text: 'Text carousel\nAnimated text\nText list'}}
+    />
+    <Composition
+      id="LoopPillMarquee"
+      component={LoopPillMarquee}
+      durationInFrames={LOOP_FRAMES}
+      {...common}
+      defaultProps={{
+        ...defaultTextProps,
+        fontSize: 52,
+        fontWeight: 500,
+        accent: '#f5c518',
+        rowGap: 150,
+        text: 'Clean style|Smooth|Text carousel|*Auto|Flexible customization\nObservable|*Auto|Clean style|Smooth|Text carousel\nSmooth|Text carousel|Flexible customization|Clean style|*Auto',
+      }}
+    />
+    <Composition
+      id="LoopSpiralText"
+      component={LoopSpiralText}
+      durationInFrames={LOOP_FRAMES}
+      {...common}
+      defaultProps={{
+        ...defaultTextProps,
+        fontSize: 54,
+        fontWeight: 500,
+        count: 14,
+        amplitude: 320,
+        text: 'Parallax effect\nFinal render\nScene transition\nText carousel\nAlpha matte\nKeyframe animation',
+      }}
     />
     {lists.map((l) => (
       <Composition

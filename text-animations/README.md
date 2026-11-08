@@ -48,6 +48,8 @@ npm run studio        # live preview + edit props in the sidebar
 | `Extrude3D` | Chunky 3D extruded title pops in |
 | `LoopPillCarousel` | Seamless loop: vertical pill labels, center ones filled and glowing (one label per line) |
 | `LoopTiltedStrips` | Seamless loop: tilted marquee rows in boxes, alternating direction (one row per line) |
+| `LoopPillMarquee` | Seamless loop: rows of outlined pill chips scrolling sideways (chips split by `\|`, start with `*` to fill) |
+| `LoopSpiralText` | Seamless loop: words ride a scrolling S-shaped ribbon |
 
 The `Loop*` clips are 90 frames and repeat with no visible jump, so you can stretch or repeat them on your timeline.
 
