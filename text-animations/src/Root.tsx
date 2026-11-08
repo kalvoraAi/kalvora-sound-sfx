@@ -162,7 +162,7 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="LoopWheel"
       component={LoopWheel}
-      durationInFrames={480}
+      durationInFrames={360}
       {...common}
       defaultProps={{
         ...defaultTextProps,

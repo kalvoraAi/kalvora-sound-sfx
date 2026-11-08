@@ -241,8 +241,8 @@ export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: num
  * 3 o'clock, a thin accent arrow points from a label ("DATE") to it, words above are bright
  * white and words below are dim gray. The wheel steps one word at a time: it holds, then
  * snaps to the next with a quick ease (months advance as the list moves down).
- * Default: ~40 frames (1.3s) per word at 30fps. (The reference clip measured ~20 frames per word.)
- * One word per line. Loop length = words x frames-per-word (default 12 words x 40 = 480 frames).
+ * Default: ~30 frames (1s) per word at 30fps. (The reference clip measured ~20 frames per word.)
+ * One word per line. Loop length = words x frames-per-word (default 12 words x 30 = 360 frames).
  * To change speed, change durationInFrames in Root.tsx (= words x frames-per-word).
  * `holdRatio` (0..1) is the share of each step spent paused.
  */
