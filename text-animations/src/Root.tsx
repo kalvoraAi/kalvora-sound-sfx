@@ -41,6 +41,8 @@ import {
   WipeReveal,
 } from './animations/More';
 
+import {LoopPillCarousel, LoopTiltedStrips} from './animations/Carousels';
+
 const common = {width: 1920, height: 1080, fps: 30};
 
 const loops = [
@@ -100,6 +102,28 @@ export const RemotionRoot: React.FC = () => (
     <Composition id="Counter" component={Counter} durationInFrames={90} {...common} defaultProps={{...defaultTextProps, fontSize: 260, from: 0, to: 1250000, prefix: '', suffix: '+', countFrames: 60}} />
     <Composition id="Karaoke" component={Karaoke} durationInFrames={110} {...common} defaultProps={{...defaultTextProps, fontSize: 120, text: 'Highlight every word as it is spoken', highlightColor: '#ff3d71', dimColor: '#6b6b6b', wordFrames: 12}} />
     <Composition id="Extrude3D" component={Extrude3D} durationInFrames={75} {...common} defaultProps={{...defaultTextProps, text: 'BIG 3D', fontSize: 240, color: '#ffd23f', extrudeColor: '#b8641a'}} />
+    <Composition
+      id="LoopPillCarousel"
+      component={LoopPillCarousel}
+      durationInFrames={LOOP_FRAMES}
+      {...common}
+      defaultProps={{
+        ...defaultTextProps,
+        fontSize: 56,
+        fontWeight: 500,
+        accent: '#ff3b14',
+        spacing: 130,
+        filledRows: 3,
+        text: 'Sea Foam\nFirefall Waterfalls\nAurora Borealis\nSand Waves\nIce Flowers\nDust Whirlwinds\nBlue Glaciers\nRainbow Mountains\nBlooming Desert\nWater Rings',
+      }}
+    />
+    <Composition
+      id="LoopTiltedStrips"
+      component={LoopTiltedStrips}
+      durationInFrames={LOOP_FRAMES}
+      {...common}
+      defaultProps={{...defaultTextProps, fontSize: 130, accent: '#ff3b14', rowHeight: 190, text: 'Text carousel\nAnimated text\nText list'}}
+    />
     {lists.map((l) => (
       <Composition
         key={l.id}

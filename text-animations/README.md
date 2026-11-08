@@ -46,6 +46,8 @@ npm run studio        # live preview + edit props in the sidebar
 | `Counter` | Number counts up (`from`, `to`, `prefix`, `suffix`) |
 | `Karaoke` | Caption words light up one at a time |
 | `Extrude3D` | Chunky 3D extruded title pops in |
+| `LoopPillCarousel` | Seamless loop: vertical pill labels, center ones filled and glowing (one label per line) |
+| `LoopTiltedStrips` | Seamless loop: tilted marquee rows in boxes, alternating direction (one row per line) |
 
 The `Loop*` clips are 90 frames and repeat with no visible jump, so you can stretch or repeat them on your timeline.
 
