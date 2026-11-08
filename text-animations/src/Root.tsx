@@ -112,14 +112,14 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="LoopPillCarousel"
       component={LoopPillCarousel}
-      durationInFrames={LOOP_FRAMES}
+      durationInFrames={300}
       {...common}
       defaultProps={{
         ...defaultTextProps,
         fontSize: 56,
         fontWeight: 500,
         accent: '#ff3b14',
-        spacing: 130,
+        spacing: 117,
         filledRows: 3,
         text: 'Sea Foam\nFirefall Waterfalls\nAurora Borealis\nSand Waves\nIce Flowers\nDust Whirlwinds\nBlue Glaciers\nRainbow Mountains\nBlooming Desert\nWater Rings',
       }}
@@ -162,18 +162,19 @@ export const RemotionRoot: React.FC = () => (
     <Composition
       id="LoopWheel"
       component={LoopWheel}
-      durationInFrames={480}
+      durationInFrames={240}
       {...common}
       defaultProps={{
         ...defaultTextProps,
         fontSize: 58,
         fontWeight: 800,
+        fontFamily: 'Montserrat, Inter, Helvetica, Arial, sans-serif',
         label: 'Date',
         accent: '#2f6bff',
         radius: 940,
         centerX: 120,
         stepDeg: 12,
-        holdRatio: 0.45,
+        holdRatio: 0.7,
         text: 'January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember',
       }}
     />

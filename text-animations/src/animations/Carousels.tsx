@@ -1,6 +1,9 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {loadFont} from '@remotion/google-fonts/Montserrat';
 import {Stage, TextProps} from '../types';
+
+const {fontFamily: montserrat} = loadFont();
 
 const useLoopP = () => {
   const frame = useCurrentFrame();
@@ -236,9 +239,10 @@ export const LoopSpiralText: React.FC<TextProps & {count: number; amplitude: num
  * A big wheel of words (like month names) turning around an off-screen-left center.
  * Words are ~12 degrees apart, so only a handful are visible: the selected word sits at
  * 3 o'clock, a thin accent arrow points from a label ("DATE") to it, words above are bright
- * white and words below are dim gray. The wheel steps one word at a time: it pauses, then
- * eases to the next (months advance as the list moves down).
- * One word per line. Loop length = words x frames-per-word (default 12 x 40 = 480 frames).
+ * white and words below are dim gray. The wheel steps one word at a time: it holds, then
+ * snaps to the next with a quick ease (months advance as the list moves down).
+ * Timing measured from the reference: ~20 frames per word at 30fps (hold ~14f, move ~6f).
+ * One word per line. Loop length = words x 20 frames (default 12 words = 240 frames).
  * `holdRatio` (0..1) is the share of each step spent paused.
  */
 export const LoopWheel: React.FC<
@@ -250,7 +254,7 @@ export const LoopWheel: React.FC<
   const x = t * n;
   const k = Math.floor(x);
   const f = Math.max(0, (x - k - p.holdRatio) / (1 - p.holdRatio));
-  const frac = f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2; // 0 while holding, then eases 0..1
+  const frac = 1 - Math.pow(1 - f, 3); // 0 while holding, then a quick ease-out 0..1
   const startX = p.centerX + p.radius;
   const slots = Array.from({length: 13}, (_, i) => i - 7); // -7 (high above) .. +5 (below)
   return (
@@ -286,28 +290,27 @@ export const LoopWheel: React.FC<
         <div
           style={{
             position: 'absolute',
-            left: startX - 215 - 40,
+            left: startX - 195 - 26,
             top: 540,
             transform: 'translate(-100%, -50%)',
-            fontSize: p.fontSize * 0.7,
+            fontSize: p.fontSize * 0.72,
             fontFamily: p.fontFamily,
             fontWeight: p.fontWeight,
+            letterSpacing: 1,
             color: p.color,
           }}
         >
           {p.label.toUpperCase()}
         </div>
-        <div
-          style={{
-            position: 'absolute',
-            left: startX - 215,
-            top: 540,
-            width: 165,
-            height: 3,
-            transform: 'translateY(-50%)',
-            background: p.accent,
-          }}
-        />
+        <svg
+          width={173}
+          height={28}
+          viewBox="0 0 173 28"
+          style={{position: 'absolute', left: startX - 195, top: 540 - 14}}
+        >
+          <line x1="0" y1="14" x2="160" y2="14" stroke={p.accent} strokeWidth={3} />
+          <polygon points="173,14 156,5 156,23" fill={p.accent} />
+        </svg>
       </div>
     </Stage>
   );
